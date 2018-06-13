@@ -1,14 +1,12 @@
-#第一行必须指令基于的基础镜像
-From ubutu
-
-#维护者信息
-MAINTAINER docker_user  docker_user@mail.com
-
-#镜像的操作指令
-apt/sourcelist.list
-
-RUN apt-get update && apt-get install -y ngnix 
-RUN echo "\ndaemon off;">>/etc/ngnix/nignix.conf
-
-#容器启动时执行指令
-CMD /usr/sbin/ngnix
+FROM centos:6.8
+# 维护者信息
+MAINTAINER hylexus "hylexus@163.com"
+# 将Dockerfile上下文中的nginx.repo复制到容器中的yum源位置
+COPY ./nginx.repo /etc/yum.repos.d/nginx.repo
+RUN yum makecache
+# 安装nginx
+RUN yum install -y nginx
+# 修改nginx首页信息
+RUN echo "home page of container niginx server" > /usr/share/nginx/html/index.html
+# 暴露80端口
+EXPOSE 80
